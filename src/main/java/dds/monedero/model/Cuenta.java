@@ -29,11 +29,15 @@ public class Cuenta {
   public void poner(double cuanto) {
     controlMontoNegativo(cuanto);
 
-    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) {
+    if (cantidadDeDepositos() >= 3) {
       throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
     }
 
     new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
+  }
+
+  private long cantidadDeDepositos() {
+    return getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count();
   }
 
   private void controlMontoNegativo(double cuanto) {
